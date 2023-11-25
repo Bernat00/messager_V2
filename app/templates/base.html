@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messager</title>
+</head>
+<body>
+kell a base-ba navbár meg bootstrap
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <h3>{{ message }}</h3>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<br>
+{% block main %}{% endblock %}
+</body>
+</html>

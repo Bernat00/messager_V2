@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<form method="post">
+    {{ form.hidden_tag() }}
+
+    {{ form.username.label }}
+    {{ form.username() }}
+    <br>
+    {{ form.password.label }}
+    {{ form.password() }}
+    <br>
+    {{ form.submit() }}
+    <br>
+    <p>Don't have an accaunt? <a href="{{ url_for('user.register') }}">Create one!</a></p>
+
+</form>
+
+{% endblock %}

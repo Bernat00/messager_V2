@@ -1,4 +1,4 @@
-from sqlalchemy import String, func
+from sqlalchemy import String, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from alchemical import Alchemical, Model
 
@@ -13,8 +13,21 @@ class Users(Model):
 class Messages(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     sender: Mapped[int] = mapped_column()
-    recipient: Mapped[int] = mapped_column()
+    room: Mapped[str] = mapped_column()
     timestamp: Mapped[int] = mapped_column(server_default=func.now())
+
+
+class Rooms(Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_name: Mapped[int] = mapped_column()
+
+
+class RoomUser(Model):
+    __tablename__ = 'room_message'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column()
+    room_id: Mapped[int] = mapped_column()
 
 
 def init_db():

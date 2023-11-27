@@ -35,4 +35,15 @@ class Room:
         for id in room_ids:
             rooms.append(Room.find_by_id(id))
 
+        return rooms
+
+    @staticmethod
+    def get_rooms_name_and_user(name, username):
+        rooms = Room.get_rooms_by_users(username)
+
+        for room in rooms:
+            if name not in room.members:
+                rooms.remove(room)
+
+        return rooms
 

@@ -12,6 +12,7 @@ class Users(Model):
 
 class Messages(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column(String(2000))
     sender: Mapped[int] = mapped_column()
     room: Mapped[str] = mapped_column()
     timestamp: Mapped[int] = mapped_column(server_default=func.now())

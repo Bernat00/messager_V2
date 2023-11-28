@@ -18,6 +18,7 @@ def login():
         if user is not None:
             if user.check_password(form.password.data):
                 session['username'] = username
+                session['user_id'] = user.user_id
                 return redirect(url_for('chats.chats'))
             else:
                 flash('Password is incorrect!', 'warning')

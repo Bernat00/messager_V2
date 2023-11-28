@@ -1,7 +1,35 @@
 {% extends 'base.html' %}
 
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script>
+        socket = io()
+    </script>
+
+{% endblock %}
+
 {% block main %}
 
+<script>
+    socket.emit('get_rooms')
+    socket.on('got_rooms', function (rooms) {
+        let ul = document.createElement('ul');
+            ul.setAttribute('id','rooms');
+
+            document.getElementById('chat_rooms').appendChild(ul);
+            rooms.forEach(renderProductList);
+
+            function renderProductList(element, index, arr) {
+                let li = document.createElement('li');
+                li.setAttribute('class', 'item');
+                li.setAttribute('onclick', socket.emit('get_chat', element['room_id']))
+
+                ul.appendChild(li);
+
+                li.innerHTML = li.innerHTML + element['room_name'];
+            }
+    });
+</script>
 
 
 {% endblock %}

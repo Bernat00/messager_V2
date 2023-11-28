@@ -42,4 +42,6 @@ def __load_current_user():
     if session.get('user_id') is None:
         g.user = None
     else:
-        g.user = User.find_by_id(session.get('user_id'))
+        user_id = session['user_id']
+        g.username = User.find_by_id(user_id)
+        g.user_id = user_id

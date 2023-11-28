@@ -47,3 +47,10 @@ class Room:
 
         return rooms
 
+    def to_dict(self):
+        tmp = {
+            'room_id': self.room_id,
+            'room_name': self.room_name,
+            'members': self.members
+        }
+

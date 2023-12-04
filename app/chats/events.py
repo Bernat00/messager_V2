@@ -5,11 +5,12 @@ from app import socketio
 from app.models.rooms import Room
 
 
-@socketio.on('joined', namespace='/chat')
+"""@socketio.on('joined', namespace='/chat')
 def joined(message):
     room = Room.find_by_id(session['room_id']).room_name
     join_room(room)
     emit('status', {'name': session['username'], 'event': 'join'})
+"""
 
 
 @socketio.on('get_rooms')
@@ -27,3 +28,7 @@ def get_chat(room_id):
     if session['user_id'] in room.members:
         emit('got_room', room.to_dict())
 
+
+@socketio.on('connect')
+def connect():
+    print('connected')

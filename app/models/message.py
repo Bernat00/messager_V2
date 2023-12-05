@@ -14,11 +14,16 @@ class Message:
 
     @staticmethod
     def get_by_room(room_id):
-        with db.Session as s:
-            messages = s.get(Messages, room_id).order_by(Messages.id)
+        messages = []
+        with db.Session() as s:
+            query = s.get(Messages, room_id).order_by(Messages.timestamp)
 
-        return Message(messages.sender, messages.content, Room.find_by_id(messages.room),
-                       messages.id, messages.timestamp)
+        for message in query:
+            messages.append(
+                Message(message.sender, message.content, message.room, message.id, message.timestamp)
+            )
+
+        return messages
 
     @staticmethod
     def new_message(message):
@@ -26,4 +31,15 @@ class Message:
             new_message = Messages(content=message.content, sender=message.sender,
                                    room=message.room.room_id)
             s.add(new_message)
+
+    def to_dict(self):
+        tmp = {
+            'sender': self.sender,
+            'content': self.content,
+            'room': self.room,
+            'id': self.id,
+            'timestamp': self.timestamp
+        }
+
+        return tmp
 

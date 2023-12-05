@@ -4,11 +4,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script>
         socket = io()
-    </script>
 
+        socket.on('got_chat', function (chat){
+           document.getElementById('rooms').style.display = 'None';
+           console.log(chat)
+        });
+    </script>
 {% endblock %}
 
 {% block main %}
+
+    <div id="chat_rooms">
+
+    </div>
 
 <script>
     socket.emit('get_rooms')
@@ -17,12 +25,14 @@
             ul.setAttribute('id','rooms');
 
             document.getElementById('chat_rooms').appendChild(ul);
-            rooms.forEach(renderProductList);
+            rooms.forEach(renderRoomsList);
 
-            function renderProductList(element, index, arr) {
+            function renderRoomsList(element, index, arr) {
                 let li = document.createElement('li');
                 li.setAttribute('class', 'item');
-                li.setAttribute('onclick', socket.emit('get_chat', element['room_id']))
+                li.addEventListener('click', function (){
+                    socket.emit('get_chat', element['room_id']);
+                });
 
                 ul.appendChild(li);
 

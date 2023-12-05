@@ -40,8 +40,9 @@ def init_app(app):
 
 def __load_current_user():
     if session.get('user_id') is None:
-        g.user = None
+        g.username = None
+        g.user_id = None
     else:
         user_id = session['user_id']
-        g.username = User.find_by_id(user_id)
+        g.username = User.find_by_id(user_id).username
         g.user_id = user_id

@@ -1,6 +1,8 @@
-from app.db import init_db, RoomUser, Rooms
+import app.db
+from app.db import RoomUser, Rooms
+from app.models.user import User
 
-db = init_db()
+db = app.db.init_db()
 
 
 class Room:
@@ -21,25 +23,26 @@ class Room:
 
     @staticmethod
     def find_by_id(room_id):
-        with db.Session as s:
+        with db.Session() as s:
             room = s.get(Rooms, room_id)
             menbers = s.scalars(RoomUser.select().where(room_id=room_id)).user_id
 
         return Room(room.room_name, menbers, room_id)
 
     @staticmethod
-    def get_rooms_by_users(user):
-        with db.Session as s:
-            room_ids = s.scalars(RoomUser.select().where(RoomUser.user_id == user.user_id)).room_id
+    def get_rooms_by_user_id(user_id):
+        with db.Session() as s:
+            room_ids = s.scalars(RoomUser.select().where(RoomUser.user_id == user_id))
         rooms = []
         for id in room_ids:
-            rooms.append(Room.find_by_id(id))
+            rooms.append(Room.find_by_id(id).room_id)
 
         return rooms
 
     @staticmethod
     def get_rooms_name_and_user(name, username):
-        rooms = Room.get_rooms_by_users(username)
+        user_id = User.find_by_username(username)
+        rooms = Room.get_rooms_by_user_id(user_id)
 
         for room in rooms:
             if name not in room.members:

@@ -17,7 +17,7 @@ class Messages(Model):
     content: Mapped[str] = mapped_column(String(2000))
     sender: Mapped[int] = mapped_column()
     room: Mapped[str] = mapped_column()
-    timestamp: Mapped[datetime] = mapped_column(server_default=func.now())
+    timestamp: Mapped[str] = mapped_column(server_default=datetime.now().isoformat())
 
 
 class Rooms(Model):
@@ -26,7 +26,7 @@ class Rooms(Model):
 
 
 class RoomUser(Model):
-    __tablename__ = 'room_message'
+    __tablename__ = 'room_user'
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column()

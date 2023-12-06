@@ -16,20 +16,24 @@ class Message:
     def get_by_room(room_id):
         messages = []
         with db.Session() as s:
-            query = s.get(Messages, room_id).order_by(Messages.timestamp)
+            query = s.get(Messages, room_id)
 
-        for message in query:
-            messages.append(
-                Message(message.sender, message.content, message.room, message.id, message.timestamp)
-            )
+        if query is None:
+            messages = None
+        else:
+            query = query.order_by(Messages.timestamp)
+            for message in query:
+                messages.append(
+                    Message(message.sender, message.content, message.room, message.id, message.timestamp)
+                )
 
         return messages
 
     @staticmethod
     def new_message(message):
         with db.begin() as s:
-            new_message = Messages(content=message.content, sender=message.sender,
-                                   room=message.room.room_id)
+            new_message = Messages(content=message['content'], sender=message['sender'],
+                                   room=message['room_id'])
             s.add(new_message)
 
     def to_dict(self):

@@ -44,7 +44,7 @@ def register():
         new_user = User(username, email, password=password)
         User.save(new_user)
         session['username'] = username
-        session['user_id'] = User.find_by_username(username)
+        session['user_id'] = User.find_by_username(username).user_id
         return redirect(url_for('chats.chats'))
 
     return render_template('user/register.html', username=username, email=email, password=password,

@@ -6,18 +6,26 @@
         socket = io()
 
         socket.on('got_chat', function (chat){
-           document.getElementById('rooms').style.display = 'None';
+           document.getElementById('chat_rooms').style.display = 'None';
            console.log(chat)
         });
+
+        function get_chat(room_id) {
+             socket.emit('get_chat', room_id)
+           }
     </script>
 {% endblock %}
 
 {% block main %}
 
     <div id="chat_rooms">
-
+        <ul>
+        {% for room in rooms %}
+           <li onclick="get_chat({{ room.room_id }})">{{ room.room_name }}</li>
+        {% endfor %}
+        </ul>
     </div>
-
+<!--
 <script>
     socket.emit('get_rooms')
     socket.on('got_rooms', function (rooms) {
@@ -40,6 +48,8 @@
             }
     });
 </script>
+//-->
+
 
 
 {% endblock %}

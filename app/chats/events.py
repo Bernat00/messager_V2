@@ -1,7 +1,9 @@
 import json
 
+from flask import request
+
 from app.security import session
-from flask_socketio import emit, join_room, leave_room
+from flask_socketio import emit, join_room, rooms
 from app.chats import io_bp
 
 from app.models.rooms import Room
@@ -29,12 +31,20 @@ def get_chat(room_id):
 
     if session['user_id'] in Room.find_by_id(room_id).members:
         join_room(room.room_name)
-        emit('got_chat', chat_dict, room=room.room_name)  # ez így nem jó
+        print(rooms())
+        emit('got_chat', chat_dict, sid=request.sid)
 
 
 @io_bp.on('new_message')
 def new_message(msg):
-    Message.new_message(msg)
+    print(rooms())
+    message = {
+        'sender': session['username'],
+        'room_id': rooms()[1],
+        'content': msg
+    }
+    Message.new_message(message)
+    emit('got_chat', message, room=message['room_id'])
 
 
 @io_bp.on('connect')

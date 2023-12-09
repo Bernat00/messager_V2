@@ -16,7 +16,7 @@ class Message:
     def get_by_room(room_id):
         messages = []
         with db.Session() as s:
-            query = s.scalars(Messages.select().order_by(Messages.timestamp))
+            query = s.scalars(Messages.select().where(Messages.room == room_id).order_by(Messages.timestamp))
 
             for message in query:
                 messages.append(

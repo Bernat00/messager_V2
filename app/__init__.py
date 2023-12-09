@@ -15,7 +15,7 @@ def create_app():
     app.register_blueprint(user_bp, url_prefix='/')
 
     from app.chats import bp as chats_bp
-    app.register_blueprint(chats_bp, url_prefix='/')
+    app.register_blueprint(chats_bp, url_prefix='/chats')
 
     io_bp.init_io(socketio)
 

@@ -5,10 +5,18 @@
     <script>
         socket = io()
 
+        var room_id = ''
+
         socket.on('got_chat', function (chat){
+
            document.getElementById('chat_rooms').style.display = 'None';
-           console.log(chat)
+           window.room_id = chat['room_id'];
+           console.log(chat);
         });
+
+        function send_msg(msg){
+            socket.emit('new_message', {'room_id': window.room_id, 'content': msg})
+        }
 
         function get_chat(room_id) {
              socket.emit('get_chat', room_id)

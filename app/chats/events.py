@@ -21,16 +21,16 @@ def joined(message):
 def get_chat(room_id):
     chat = Message.get_by_room(room_id)
     room = Room.find_by_id(room_id)
-    chat_dict = []
+    chat_dict = {'room_id': room.room_id, 'messages': []}
 
-    if chat is None:
-        chat_dict = [{'content': 'No messages yet!'}]
+    if len(chat) == 0:
+        chat_dict['messages'].append({'content': 'No messages yet!'})
     else:
         for message in chat:
-            chat_dict.append(message.to_dict())
+            chat_dict['messages'].append(message.to_dict())
 
     if session['user_id'] in Room.find_by_id(room_id).members:
-        join_room(room.room_name)
+        join_room(room.room_id)
         print(rooms())
         emit('got_chat', chat_dict, sid=request.sid)
 
@@ -40,8 +40,8 @@ def new_message(msg):
     print(rooms())
     message = {
         'sender': session['username'],
-        'room_id': rooms()[1],
-        'content': msg
+        'room_id': msg['room_id'],
+        'content': msg['content']
     }
     Message.new_message(message)
     emit('got_chat', message, room=message['room_id'])

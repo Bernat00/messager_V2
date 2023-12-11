@@ -5,6 +5,6 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class NewChatForm(FlaskForm):
     pass
-    # todo select multiple vagy valami hasonló
+    # todo select multiple vagy valami hasonló, youtube tutorial
 
 

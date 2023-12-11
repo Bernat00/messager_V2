@@ -7,7 +7,10 @@ from app.user.forms import LoginForm, RegisterForm
 from app.models.user import User
 
 
-# ide login, register, edit
+@bp.route('/')
+def home():
+    return redirect(url_for('chats.chats'))
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():

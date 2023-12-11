@@ -9,6 +9,8 @@ from app.chats import io_bp
 from app.models.rooms import Room
 from app.models.message import Message
 
+
+# todo a joineddel valamit kezdeni
 """@socketio.on('joined', namespace='/chat')
 def joined(message):
     room = Room.find_by_id(session['room_id']).room_name
@@ -45,6 +47,8 @@ def new_message(msg):
     }
     Message.new_message(message)
     emit('got_chat', message, room=message['room_id'])
+
+# todo kéne egy new message emit mer nem jó újrahasználni ugyanazt mer mindig átmegy minden
 
 
 @io_bp.on('connect')

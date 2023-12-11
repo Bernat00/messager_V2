@@ -7,6 +7,8 @@ from app.models.message import Message
 
 
 @bp.route('')
+@is_fully_authenticated
 def chats():
+    # todo form for new chat
     rooms = Room.get_rooms_by_user_id(session['user_id'])
     return render_template('chats.html', rooms=rooms)

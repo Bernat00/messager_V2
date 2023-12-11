@@ -8,8 +8,8 @@ from app.models.user import User
 def is_fully_authenticated(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('pages.login', redirect=request.path))
+        if g.username is None or g.user_id is None:
+            return redirect(url_for('user.login', redirect=request.path))
 
         return view(**kwargs)
 

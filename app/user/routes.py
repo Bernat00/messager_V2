@@ -1,4 +1,6 @@
-from flask import Flask, session, render_template, redirect, url_for, flash
+from urllib.parse import urlsplit
+
+from flask import Flask, session, render_template, redirect, url_for, flash, request
 
 from app.user import bp
 from app.user.forms import LoginForm, RegisterForm
@@ -19,6 +21,11 @@ def login():
             if user.check_password(form.password.data):
                 session['username'] = username
                 session['user_id'] = user.user_id
+                # redirecting after login
+                if request.args.get('redirect') is not None \
+                        and urlsplit(request.args.get('redirect')).netloc == '':
+                    return redirect(request.args.get('redirect'))
+                # just normal login
                 return redirect(url_for('chats.chats'))
             else:
                 flash('Password is incorrect!', 'warning')
@@ -57,3 +64,5 @@ def logout():
     flash('Logout successful.')
 
     return redirect(url_for('user.login'))
+
+# todo edit user stuff

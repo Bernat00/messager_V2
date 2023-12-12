@@ -13,15 +13,20 @@ class Room:
         self.members = members
         self.room_id = room_id
 
-    @staticmethod
-    def save(room):
-        if room.room_id is not None:
+    def save(self):
+        if self.room_id is None:
             with db.begin() as session:
-                new_room = Rooms(room_name=room.room_name)
+                new_room = Rooms(room_name=self.room_name)
                 session.add(new_room)
+                session.flush()
+                new_room_id = new_room.id
 
-                for member in room.members:
-                    session.add(RoomUser(user_id=member, room_id=room.room_id))
+                print(new_room_id)
+
+                for member in self.members:
+                    session.add(RoomUser(user_id=member, room_id=new_room_id))
+
+            self.room_id = new_room_id
 
     @staticmethod
     def find_by_id(room_id):

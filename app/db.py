@@ -22,7 +22,7 @@ class Messages(Model):
 
 class Rooms(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    room_name: Mapped[int] = mapped_column()
+    room_name: Mapped[str] = mapped_column(String(128))
 
 
 class RoomUser(Model):

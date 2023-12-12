@@ -10,6 +10,7 @@
         socket.on('got_chat', function (chat){
 
            document.getElementById('chat_rooms').style.display = 'None';
+           document.getElementById('add_room').style.display = 'None';
            window.room_id = chat['room_id'];
            console.log(chat);
         });
@@ -25,6 +26,18 @@
 {% endblock %}
 
 {% block main %}
+
+    <form method="post" id="add_room">
+        {{ form.hidden_tag() }}
+
+        {{ form.room_name.label }}
+        {{ form.room_name() }}
+
+        {{ form.selected_people.label }}
+        {{ form.selected_people() }}
+
+        {{ form.submit() }}
+    </form>
 
     <div id="chat_rooms">
         <ul>

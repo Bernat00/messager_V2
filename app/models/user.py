@@ -29,7 +29,10 @@ class User:
     def find_by_id(user_id):
         with db.Session() as session:
             user = session.scalar(Users.select().where(Users.id == user_id))
-            return User(user.username, user.email, user.password, user.id)
+            if user is not None:
+                return User(user.username, user.email, user.password, user.id)
+
+        return None
 
     @staticmethod
     def find_by_username(username):
@@ -58,3 +61,16 @@ class User:
         with db.begin() as s:
             user = s.get(Users, user_id)
             s.delete(user)
+
+    @staticmethod
+    def get_all_tuple_incomplete():
+        with db.Session() as s:
+            users = s.scalars(Users.select())
+
+            user_tuples = []
+            for user in users:
+                user_tuples.append((user. id, user.username))
+
+        return user_tuples
+
+

@@ -39,7 +39,8 @@ def init_app(app):
 
 
 def __load_current_user():
-    if session.get('user_id') is None:
+    user = User.find_by_id(session.get('user_id'))
+    if user is None:
         g.username = None
         g.user_id = None
     else:

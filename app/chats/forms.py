@@ -1,10 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, SubmitField, SelectMultipleField
+from wtforms.validators import DataRequired, Length
 
 
 class NewChatForm(FlaskForm):
-    pass
-    # todo select multiple vagy valami hasonló, youtube tutorial
+
+    room_name = StringField('szoba neve', validators=[DataRequired(), Length(min=3, max=128)])
+    selected_people = SelectMultipleField(coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Create')
 
 

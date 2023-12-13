@@ -9,8 +9,9 @@
         var user_name;
         // todo var latest_msg_user; ijesmi segítségével kiírni ha valaki más üzent mint előbb
 
-        socket.on('got_chat', function (chat){
 
+
+        socket.on('got_chat', function (chat){
            document.getElementById('chat_rooms').hidden = true;
            document.getElementById('add_room').hidden = true;
            document.getElementById('add_room_form_btn').hidden = true;
@@ -35,6 +36,8 @@
             }
         });
 
+
+
         socket.on('got_new_message', function (msg){
             let  chat_text = document.getElementById('chat_text');
             let li = document.createElement('li');
@@ -47,6 +50,7 @@
 
             console.log(msg)
         });
+
 
         function send_msg(msg=null){
             let text_input = document.getElementById('msg_input');
@@ -116,6 +120,15 @@
         <br>
         <button type="button" onclick="send_msg()">send</button>
      </div>
+    <script>
+        let text_input = document.getElementById("msg_input");
+
+        text_input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                send_msg();
+            }
+        });
+    </script>
 
 <!--
 <script>
@@ -141,7 +154,4 @@
     });
 </script>
 //-->
-
-
-
 {% endblock %}

@@ -34,7 +34,7 @@ def get_chat(room_id):
             chat_dict['messages'].append(chat_message)
 
     if session['user_id'] in Room.find_by_id(room_id).members:
-        join_room(room.room_id)             # todo áááááááááááá mi van a room id-val?
+        join_room(room.room_id)
         emit('got_chat', chat_dict, sid=request.sid)
 
 

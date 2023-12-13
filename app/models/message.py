@@ -1,5 +1,4 @@
-from app.db import init_db, Messages
-from app.models.rooms import Room
+from app.db import init_db, Messages, Users
 
 db = init_db()
 
@@ -31,6 +30,11 @@ class Message:
             new_message = Messages(content=message['content'], sender=message['sender'],
                                    room=message['room_id'])
             s.add(new_message)
+
+    def sender_name(self):
+        with db.Session() as s:
+            sender = s.get(Users, self.sender)
+        return sender.username
 
     def to_dict(self):
         tmp = {

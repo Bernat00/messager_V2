@@ -1,6 +1,6 @@
 from urllib.parse import urlsplit
 
-from flask import Flask, session, render_template, redirect, url_for, flash, request
+from flask import session, render_template, redirect, url_for, flash, request
 
 from app.user import bp
 from app.user.forms import LoginForm, RegisterForm

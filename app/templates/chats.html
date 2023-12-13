@@ -1,42 +1,103 @@
 {% extends 'base.html' %}
 
-{% block script %}
+{% block head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script>
         socket = io()
 
-        var room_id = ''
+        var room_id;
+        var user_name;
+        // todo var latest_msg_user; ijesmi segítségével kiírni ha valaki más üzent mint előbb
 
         socket.on('got_chat', function (chat){
 
-           document.getElementById('chat_rooms').style.display = 'None';
-           document.getElementById('add_room').style.display = 'None';
+           document.getElementById('chat_rooms').hidden = true;
+           document.getElementById('add_room').hidden = true;
+           document.getElementById('add_room_form_btn').hidden = true;
            window.room_id = chat['room_id'];
+           window.user_name = chat['my_name'];
+
+
            console.log(chat);
+
+
+           document.getElementById('chat').hidden = false;
+           let chat_text = document.getElementById('chat_text')
+
+            for (let i of chat['messages']){
+                let li = document.createElement('li');
+                li.innerHTML = i['content'];
+
+                if (i['sender_name'] === window.user_name) { li.classList.add('own'); }
+
+
+                chat_text.appendChild(li);
+            }
         });
 
-        function send_msg(msg){
-            socket.emit('new_message', {'room_id': window.room_id, 'content': msg})
+        socket.on('got_new_message', function (msg){
+            let  chat_text = document.getElementById('chat_text');
+            let li = document.createElement('li');
+            li.innerHTML = msg['content'];
+            li.innerHTML = msg['content'];
+
+            if (msg['sender_name'] === window.user_name) { li.classList.add('own'); }
+
+            chat_text.appendChild(li);
+
+            console.log(msg)
+        });
+
+        function send_msg(msg=null){
+            let text_input = document.getElementById('msg_input');
+
+            if(msg === null){
+                msg = text_input.value;
+            }
+            if(msg !== ""){
+                socket.emit('new_message', {'room_id': window.room_id, 'content': msg});
+                text_input.value = "";
+            }
+
         }
+
 
         function get_chat(room_id) {
              socket.emit('get_chat', room_id)
            }
+
+
+        function add_room_form(hide=false) {
+            document.getElementById('add_room').hidden = hide;
+            document.getElementById('add_room_form_btn').hidden = !hide;
+
+        }
     </script>
+    <style>
+        .own{
+            margin-left: 25vw;
+        }
+    </style>
 {% endblock %}
 
 {% block main %}
 
-    <form method="post" id="add_room">
+    <button type="button" id="add_room_form_btn" onclick="add_room_form()">create new chat</button>
+
+    <form method="post" id="add_room" hidden="hidden">
         {{ form.hidden_tag() }}
 
         {{ form.room_name.label }}
+        <br>
         {{ form.room_name() }}
-
+        <br>
+        <br>
         {{ form.selected_people.label }}
+        <br>
         {{ form.selected_people() }}
-
-        {{ form.submit() }}
+        <br>
+        <br>
+        {{ form.submit(onclick="add_room_form(true)") }}
     </form>
 
     <div id="chat_rooms">
@@ -46,6 +107,16 @@
         {% endfor %}
         </ul>
     </div>
+
+     <div id="chat" hidden="hidden">
+        <ul id="chat_text"></ul>
+        <br>
+        <br>
+        <input type="text" id="msg_input">
+        <br>
+        <button type="button" onclick="send_msg()">send</button>
+     </div>
+
 <!--
 <script>
     socket.emit('get_rooms')

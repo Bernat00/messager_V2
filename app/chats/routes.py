@@ -1,6 +1,5 @@
-from flask import session, render_template
+from flask import session, render_template, redirect, url_for
 
-import app.chats.events
 from app.chats import bp
 
 from app.security import is_fully_authenticated
@@ -21,10 +20,13 @@ def chats():
 
     if form.validate_on_submit():
         room_name = form.room_name.data
+
         members = form.selected_people.data
+        members.append(session['user_id'])
 
         room = Room(room_name, members)
         room.save()
-        # todo valahogy vissza kéne adni az uj szobat
+
+        return redirect(url_for('chats.chats'))
 
     return render_template('chats.html', rooms=rooms, form=form)

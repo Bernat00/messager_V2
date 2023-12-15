@@ -3,7 +3,7 @@ bidict~=0.22.1
 blinker~=1.7.0
 click~=8.1.7
 colorama~=0.4.6
-dnspython==2.4.2
+dnspython~=2.4.2
 email-validator~=2.1.0.post1
 eventlet~=0.33.3
 Flask~=3.0.0
@@ -11,7 +11,7 @@ Flask-SocketIO~=5.3.6
 Flask-WTF~=1.2.1
 greenlet~=3.0.1
 h11~=0.14.0
-idna=~3.5
+idna~=3.5
 IOBlueprint @ git+http://github.com/m-housh/io-blueprint.git@7a8c9f93d9f9e7f8c4e39847d15434392cc7295c
 itsdangerous~=2.1.2
 Jinja2~=3.1.2

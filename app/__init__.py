@@ -19,3 +19,9 @@ def create_app():
     return app
 
 
+def create_socket(app):
+    socketio = SocketIO(app)
+    io_bp.init_io(socketio)
+
+    return socketio
+

@@ -2,80 +2,30 @@
 
 {% block head %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="static/js/chat.js"></script>
+
     <script>
         socket = io()
 
-        var room_id;
-        var user_name;
-        // todo var latest_msg_user; ijesmi segítségével kiírni ha valaki más üzent mint előbb
+        var a_chat;
 
 
 
         socket.on('got_chat', function (chat){
-           document.getElementById('chat_rooms').hidden = true;
-           document.getElementById('add_room').hidden = true;
-           document.getElementById('add_room_form_btn').hidden = true;
-           window.room_id = chat['room_id'];
-           window.user_name = chat['my_name'];
-
 
            console.log(chat);
+           a_chat = new Chat(chat['messages'], chat['room_id'], chat['my_name']);
+           a_chat.display();
 
-
-           document.getElementById('chat').hidden = false;
-           let chat_text = document.getElementById('chat_text')
-
-            for (let i of chat['messages']){
-                let li = document.createElement('li');
-                li.innerHTML = i['content'];
-
-                if (i['sender_name'] === window.user_name) { li.classList.add('own'); }
-
-
-                chat_text.appendChild(li);
-            }
         });
 
-
-
-        socket.on('got_new_message', function (msg){
-            let  chat_text = document.getElementById('chat_text');
-            let li = document.createElement('li');
-            li.innerHTML = msg['content'];
-            li.innerHTML = msg['content'];
-
-            if (msg['sender_name'] === window.user_name) { li.classList.add('own'); }
-
-            chat_text.appendChild(li);
-
-            console.log(msg)
-        });
-
-
-        function send_msg(msg=null){
-            let text_input = document.getElementById('msg_input');
-
-            if(msg === null){
-                msg = text_input.value;
+         socket.on('got_new_message', function (msg){
+            if (a_chat !== null){
+                a_chat.newMsg(msg);
+                a_chat.displayNew();
             }
-            if(msg !== ""){
-                socket.emit('new_message', {'room_id': window.room_id, 'content': msg});
-                text_input.value = "";
-            }
+         });
 
-        }
-
-
-        function get_chat(room_id) {
-             socket.emit('get_chat', room_id)
-           }
-
-
-        function add_room_form(hide=false) {
-            document.getElementById('add_room').hidden = hide;
-            document.getElementById('add_room_form_btn').hidden = !hide;
-
-        }
     </script>
     <style>
         .own{
@@ -121,6 +71,31 @@
         <button type="button" onclick="send_msg()">send</button>
      </div>
     <script>
+        function send_msg(msg=null){
+            let text_input = document.getElementById('msg_input');
+
+            if(msg === null){
+                msg = text_input.value;
+            }
+            if(msg !== ""){
+                socket.emit('new_message', {'room_id': a_chat.room_id, 'content': msg});
+                text_input.value = "";
+            }
+
+        }
+
+
+        function get_chat(room_id) {
+             socket.emit('get_chat', room_id)
+           }
+
+
+        function add_room_form(hide=false) {
+            document.getElementById('add_room').hidden = hide;
+            document.getElementById('add_room_form_btn').hidden = !hide;
+
+        }
+
         let text_input = document.getElementById("msg_input");
 
         text_input.addEventListener("keypress", function(event) {
@@ -130,28 +105,4 @@
         });
     </script>
 
-<!--
-<script>
-    socket.emit('get_rooms')
-    socket.on('got_rooms', function (rooms) {
-        let ul = document.createElement('ul');
-            ul.setAttribute('id','rooms');
-
-            document.getElementById('chat_rooms').appendChild(ul);
-            rooms.forEach(renderRoomsList);
-
-            function renderRoomsList(element, index, arr) {
-                let li = document.createElement('li');
-                li.setAttribute('class', 'item');
-                li.addEventListener('click', function (){
-                    socket.emit('get_chat', element['room_id']);
-                });
-
-                ul.appendChild(li);
-
-                li.innerHTML = li.innerHTML + element['room_name'];
-            }
-    });
-</script>
-//-->
 {% endblock %}

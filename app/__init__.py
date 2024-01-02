@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_socketio import SocketIO
-from app.chats import io_bp
 
+from app.chats import io_bp
 from app import security
 
 
@@ -15,6 +15,7 @@ def create_app(server=True):
 
 	from app.chats import bp as chats_bp
 	app.register_blueprint(chats_bp, url_prefix='/chats')
+
 	if server:
 		socketio = SocketIO(app)
 		io_bp.init_io(socketio)

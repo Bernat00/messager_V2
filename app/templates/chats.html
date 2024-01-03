@@ -38,6 +38,9 @@
 {% endblock %}
 
 {% block main %}
+    <audio id="ping_sound">
+        <source src="static/audio/ping.mp3" type="audio/mpeg">
+    </audio>
 
     <button type="button" id="add_room_form_btn" onclick="add_room_form()">create new chat</button>
 

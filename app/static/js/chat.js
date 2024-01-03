@@ -4,6 +4,7 @@ class Chat {
         this.room_id = room_id;
         this.username = username;
         this.last_msg_user = null
+        this.sfx = document.getElementById('ping_sound');
     }
 
     display() {
@@ -58,6 +59,12 @@ class Chat {
     }
     newMsg(msg) {
         this.messages.push(msg);
+        if (msg['sender_name'] !== this.username) {
+            this.sfx.currentTime = 0;
+            this.sfx.play();
+
+        }
+
     }
 }
 

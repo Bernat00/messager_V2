@@ -31,6 +31,9 @@
         .own{
             margin-left: 25vw;
         }
+        .text-message{
+            border-radius: 25px;color: azure;display: inline-flex; padding: 10px; padding-left: 30px; padding-right: 30px;margin-top: 20px;text-align: left;background-image: linear-gradient(to bottom right, #5cc0e7, #0247cf);
+        }
     </style>
 {% endblock %}
 
@@ -63,7 +66,7 @@
     </div>
 
      <div id="chat" hidden="hidden">
-        <ul id="chat_text"></ul>
+        <ul id="chat_text"></ul>                <!-- todo scroll up load more messages (ne egyszerre töltse be az összeset)  -->
         <br>
         <br>
         <input type="text" id="msg_input">

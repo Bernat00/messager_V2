@@ -16,7 +16,10 @@ class Chat {
         let chat_text = document.getElementById('chat_text')
         for (let i of this.messages){
             let li = document.createElement('li');
-            li.innerHTML = i['content'];
+            let h = document.createElement('h2');
+            h.innerHTML = i['content'];
+            h.classList.add('text-message');
+            li.appendChild(h);
 
             if (i['sender_name'] === this.username) {
                 li.classList.add('own'); }
@@ -37,7 +40,10 @@ class Chat {
 
             let msg = this.messages[this.messages.length-1]
 
-            li.innerHTML = msg['content'];
+            let h = document.createElement('h2');
+            h.innerHTML = msg['content'];
+            h.classList.add('text-message');
+            li.appendChild(h);
 
 
             if (msg['sender_name'] === this.username) { li.classList.add('own'); }
